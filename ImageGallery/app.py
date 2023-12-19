@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, send_from_directory
+from flask import Flask, jsonify, redirect, render_template, request, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -22,6 +22,14 @@ with app.app_context():
 def index():
     files = File.query.all()
     return render_template('index.html', files=files)
+
+
+@app.route('/get_images_list')
+def get_images_list():
+    uploads_dir = app.config['UPLOAD_FOLDER']
+    images_list = [f for f in os.listdir(
+        uploads_dir) if os.path.isfile(os.path.join(uploads_dir, f))]
+    return jsonify(images_list)
 
 
 @app.route('/uploads', methods=['POST'])
@@ -59,6 +67,7 @@ def delete(file_id):
     db.session.delete(file)
     db.session.commit()
     return redirect('/')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

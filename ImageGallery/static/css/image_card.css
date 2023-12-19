@@ -1,0 +1,48 @@
+.item {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  padding: 15px;
+  margin: 10px;
+}
+
+.action-group-btn {
+  display: none;
+}
+
+/* Lớp phủ khi hover */
+.item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 15px;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0); /* Màu đục ban đầu */
+  z-index: 1;
+  transition: background-color 0.3s ease; /* Hiệu ứng chuyển đổi màu */
+}
+
+.item:hover::before {
+  background-color: rgba(0, 0, 0, 0.5); /* Màu làm mờ khi hover */
+}
+
+/* Hiển thị nút khi hover */
+.item:hover .action-group-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+/* Thiết lập khoảng cách giữa hai nút */
+.action-group-btn button {
+  margin: 0 2px;
+}
