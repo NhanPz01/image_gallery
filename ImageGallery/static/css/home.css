@@ -1,0 +1,39 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.container{
+    box-sizing: border-box;
+    max-width: 100%;
+    padding: 40px 0;
+}
+
+.title{
+    margin-bottom: 2rem;
+}
+
+.picture-gallery{
+    display: flex;
+    gap: 20px;
+    max-width: 100%;
+}
+
+.column{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.picture{
+    max-width: 120px;
+    height: auto;
+    border-radius: 5px;
+    object-fit: contain;
+}
+
+@media(max-width: 768px){
+    .picture-gallery{
+        flex-direction: column;
+    }
+}

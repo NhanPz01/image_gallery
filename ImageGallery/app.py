@@ -40,7 +40,7 @@ def index():
 @login_required
 def home():
     files = File.query.all()
-    return render_template('index.html', files=files, user=current_user)
+    return render_template('home.html', files=files, user=current_user)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

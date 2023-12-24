@@ -14,40 +14,13 @@
 </head>
 
 <body>
-  <main class="flex-fill">
-    <div class="row">
-      <div class="col-3 m-0 p-2">
-        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-          <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</a>
-          <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Home</a>
-          <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Add new</a>
-        </div>
-      </div>
-      <div class="col-9">
-        <div class="tab-content" id="v-pills-tabContent">
-          <!-- Profile -->
-          <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-            <div class="container">
-              <div class="profile-card"></div>
-            </div>
-          </div>
-
-          <!-- Home -->
-          <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-            {% include 'home.html' %}
-          </div>
-          <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">...</div>
-        </div>
-      </div>
-    </div>
-
-  </main>
-
-  <footer class="text-center p-2 fixed-bottom bg-primary text-white-50 font-weight-bold">
-    <p class="m-0 p-1">Copyright 2023 by NhanPz</p>
-  </footer>
-
-  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  <div id="header"></div>
 </body>
+
+<script>
+  fetch('header.html')
+    .then(response => response.text())
+    .then(data => document.getElementById('header').innerHTML = data);
+</script>
 
 </html>
