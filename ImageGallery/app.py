@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, redirect, render_template, request, send_from_directory,flash,url_for,session
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -9,16 +10,21 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'uploads'
 db = SQLAlchemy(app)
 app.secret_key = os.urandom(24)
-
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
 class File(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(200), nullable=False)
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 with app.app_context():
     db.create_all()
@@ -29,13 +35,10 @@ def index():
     return redirect(url_for('login'))
 
 @app.route('/home')
+@login_required
 def home():
-    user_id = session.get('user_id')
-    if user_id is None:
-        flash('You must be logged in to view this page')
-        return redirect(url_for('login'))
     files = File.query.all()
-    return render_template('index.html', files=files, user_id=user_id)
+    return render_template('index.html', files=files, user_id=current_user)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -62,7 +65,7 @@ def login():
 
         elif 'login' in request.form:
             if user and check_password_hash(user.password_hash, password):
-                session['user_id'] = user.id
+                login_user(user)
                 flash('Login successful')
                 return redirect(url_for('home'))
             else:
@@ -116,7 +119,11 @@ def delete(file_id):
     db.session.delete(file)
     db.session.commit()
     return redirect('/home')
-
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(debug=True)
