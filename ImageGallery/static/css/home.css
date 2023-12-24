@@ -5,18 +5,40 @@
 
 .header {
     width: vw;
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    height: 20%;
+    display: flex; 
+    justify-content: space-between; 
+    padding: 10px; 
+    height: 20%; 
+    background-color: #10b981; 
+    font-family: 'VT323'; 
+    margin-bottom: 10px;
 }
 
+.tag{
+    font-family: 'VT323';
+    font-size: larger;
+    width: 100px;
+    height: 30px;
+    color: white;
+    background-color: #047857;
+    text-align: center;
+    align-items: center;
+    padding-top: 7px;
+    border-radius: 9px;
+}
+
+.nav-button {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    background-color: #047857;
+    color: white;
+    border-radius: 5px;
+    margin: 5px;
+}
 .container {
     width: 100%;
-}
-
-.title {
-    text-align: center;
+    margin: 10px;
 }
 
 .picture-gallery {
@@ -33,6 +55,7 @@
 .picture img {
     width: 100%;
     height: auto;
+    border-radius: 7px;
     object-fit: cover;
 }
 

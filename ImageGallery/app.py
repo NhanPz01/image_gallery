@@ -68,7 +68,7 @@ def index():
 @login_required
 def home():
     files = File.query.all()
-    return render_template('home.html', files=files, user=current_user)
+    return render_template('home.html', files=files, user=current_user, tags=Tag.query.all())
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -110,6 +110,12 @@ def get_images_list():
     images_list = [f for f in os.listdir(
         uploads_dir) if os.path.isfile(os.path.join(uploads_dir, f))]
     return jsonify(images_list)
+
+@app.route('/post', methods=['GET', 'POST'])
+@login_required
+def post():
+    # Your code here
+    return render_template('post.html')
 
 @app.route('/uploads', methods=['POST'])
 @login_required

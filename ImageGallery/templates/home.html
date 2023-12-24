@@ -5,33 +5,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../static/css/home.css">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   <title>Document</title>
 </head>
 
 <body>
-  <div class="header" style="width: vw; display: flex; justify-content: space-between; padding: 10px; height: 20%;">
-    <div style="display: flex; max-width: 100px;">
-      <h1 style="color: aqua;">ART </h1>
-      <h1>GALLERY</h1>
-    </div>
+  <div class="header">
+    <a href="{{ url_for('home') }}">
+      <div style="display: flex; max-width: 100px; font-size:x-large;">
+        <h1 style="color:blue;">A </h1>
+        <h1 style="color:gold;">R </h1>
+        <h1 style="color:crimson;">T </h1>
+        <h1 style="color: white;">GALLERY</h1>
+      </div>
+    </a>
 
-    <div style="display: flex; flex-direction: column; justify-self: center; align-items: center;">
-      <h4>Nguyễn Ngọc Bảo Nhân</h4>
-      <h4>Nguyễn Văn Bách</h4>
-      <h4>Đặng Ngọc Nam</h4>
+    <div style="display: flex; flex-direction: column; justify-self: center; align-items: center; color: white;">
+      <h4 style="font-weight: 100;">Nguyễn Ngọc Bảo Nhân</h4>
+      <h4 style="font-weight: 100;">Nguyễn Văn Bách</h4>
+      <h4 style="font-weight: 100;">Đặng Ngọc Nam</h4>
     </div>
-
-    <div>{{ user.username }}</div>
+    <div style="display: flex; align-items: center;">
+      <div style="color: white; text-align: center; margin-right: 20px;">{{ user.username }}</div>
+      <div class="navigation">
+        <a href="{{ url_for('post') }}" class="nav-button">Share your picture</a>
+      </div>
+    </div>
   </div>
 
-  <!-- File Upload Form -->
-  <form action="{{ url_for('uploads') }}" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" accept="image/*">
-    <input type="submit" value="Upload">
-  </form>
+  <div style="display: flex; width: vw; justify-content: space-between; padding: 10px;">
+    {% for tag in tags %}  
+      <div class="tag">
+        {{tag.name}}
+      </div>
+    {% endfor %}
+  </div>
 
   <div class="container">
-    <h2 class="title">Gallery</h2>
 
     <div class="picture-gallery">
       {% for file in files %}
