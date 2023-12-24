@@ -23,7 +23,14 @@
   </div>
   <div class="d-flex flex-wrap align-items-center justify-content-center mt-2" id="image-list">
     {% for image in files %}
-    {% include 'image_card.html' %}
+    <div class="item col-sm-2 ml-2">
+      <img src="{{ url_for('uploaded_file', filename=image.filename) }}" alt="..." class="img img-thumbnail">
+      <div class="action-group-btn">
+        <a href="{{ url_for('download', file_id=image.id) }}" class="download-btn btn btn-primary"><i class="fas fa-download"></i></a>
+        &nbsp;&nbsp;&nbsp;
+        <a href="{{ url_for('delete', file_id=image.id) }}" class="delete-btn btn btn-danger"><i class="fas fa-trash"></i></a>
+      </div>
+    </div>
     {% endfor %}
   </div>
   <div class="d-flex justify-content-center mt-3" id="pagination">
