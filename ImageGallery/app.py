@@ -16,12 +16,14 @@ login_manager.login_view = 'login'
 class File(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(200), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # New field
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
+    files = db.relationship('File', backref='user', lazy=True)  # New field
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -38,7 +40,7 @@ def index():
 @login_required
 def home():
     files = File.query.all()
-    return render_template('index.html', files=files, user_id=current_user)
+    return render_template('index.html', files=files, user=current_user)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -85,17 +87,18 @@ def get_images_list():
 
 
 @app.route('/uploads', methods=['POST'])
+@login_required
 def uploads():
     if request.method == 'POST':
         file = request.files['file']
         if file:
             filename = file.filename
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            new_file = File(filename=filename)
+            new_file = File(filename=filename, user_id=current_user.id)  # Set the user_id field
             db.session.add(new_file)
             db.session.commit()
             return redirect('/home')
-        return 'something wrong please try again!'
+    return 'something wrong please try again!'
 
 
 @app.route('/uploaded_file/<filename>')
