@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, redirect, render_template, request, send_from_directory,flash,url_for
+from flask import Flask, jsonify, redirect, render_template, request, send_from_directory,flash,url_for,session
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 import os
@@ -30,8 +30,12 @@ def index():
 
 @app.route('/home')
 def home():
+    user_id = session.get('user_id')
+    if user_id is None:
+        flash('You must be logged in to view this page')
+        return redirect(url_for('login'))
     files = File.query.all()
-    return render_template('index.html', files=files)
+    return render_template('index.html', files=files, user_id=user_id)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -58,6 +62,7 @@ def login():
 
         elif 'login' in request.form:
             if user and check_password_hash(user.password_hash, password):
+                session['user_id'] = user.id
                 flash('Login successful')
                 return redirect(url_for('home'))
             else:
