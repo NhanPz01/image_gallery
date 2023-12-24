@@ -21,68 +21,24 @@
       <h4>Đặng Ngọc Nam</h4>
     </div>
 
-    <div>{{user.username}}</div>
+    <div>{{ user.username }}</div>
   </div>
 
-  <div class="container">
+  <!-- File Upload Form -->
+  <form action="{{ url_for('uploads') }}" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" accept="image/*">
+    <input type="submit" value="Upload">
+  </form>
 
+  <div class="container">
     <h2 class="title">Gallery</h2>
 
     <div class="picture-gallery">
-
-      <div class="column">
+      {% for file in files %}
         <div class="picture">
-          <img
-            src="https://static.vecteezy.com/system/resources/thumbnails/009/273/280/small_2x/concept-of-loneliness-and-disappointment-in-love-sad-man-sitting-element-of-the-picture-is-decorated-by-nasa-free-photo.jpg"
-            alt="">
+          <img src="{{ url_for('uploaded_file', filename=file.filename) }}" alt="{{ file.filename }}">
         </div>
-        <div class="picture">
-          <img
-            src="https://static.vecteezy.com/system/resources/thumbnails/009/273/280/small_2x/concept-of-loneliness-and-disappointment-in-love-sad-man-sitting-element-of-the-picture-is-decorated-by-nasa-free-photo.jpg"
-            alt="">
-        </div>
-        <div class="picture">
-          <img
-            src="https://static.vecteezy.com/system/resources/thumbnails/009/273/280/small_2x/concept-of-loneliness-and-disappointment-in-love-sad-man-sitting-element-of-the-picture-is-decorated-by-nasa-free-photo.jpg"
-            alt="">
-        </div>
-      </div>
-
-      <div class="column">
-        <div class="picture">
-          <img
-            src="https://static.vecteezy.com/system/resources/thumbnails/009/273/280/small_2x/concept-of-loneliness-and-disappointment-in-love-sad-man-sitting-element-of-the-picture-is-decorated-by-nasa-free-photo.jpg"
-            alt="">
-        </div>
-        <div class="picture">
-          <img
-          src="https://i.pinimg.com/564x/55/42/5e/55425e427c51795471db5d61772d2555.jpg"
-          alt="">
-        </div>
-        <div class="picture">
-          <img
-            src="https://static.vecteezy.com/system/resources/thumbnails/009/273/280/small_2x/concept-of-loneliness-and-disappointment-in-love-sad-man-sitting-element-of-the-picture-is-decorated-by-nasa-free-photo.jpg"
-            alt="">
-        </div>
-      </div>
-
-      <div class="column">
-        <div class="picture">
-          <img
-            src="https://static.vecteezy.com/system/resources/thumbnails/009/273/280/small_2x/concept-of-loneliness-and-disappointment-in-love-sad-man-sitting-element-of-the-picture-is-decorated-by-nasa-free-photo.jpg"
-            alt="">
-        </div>
-        <div class="picture">
-          <img
-            src="https://static.vecteezy.com/system/resources/thumbnails/009/273/280/small_2x/concept-of-loneliness-and-disappointment-in-love-sad-man-sitting-element-of-the-picture-is-decorated-by-nasa-free-photo.jpg"
-            alt="">
-        </div>
-        <div class="picture">
-          <img
-            src="https://i.pinimg.com/564x/55/42/5e/55425e427c51795471db5d61772d2555.jpg"
-            alt="">
-        </div>
-      </div>
+      {% endfor %}
     </div>
   </div>
 </body>
