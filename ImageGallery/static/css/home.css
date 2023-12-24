@@ -4,8 +4,8 @@
 }
 
 .container{
-    box-sizing: border-box;
-    max-width: 100%;
+    max-width: 1124px;
+    margin: 0 auto;
     padding: 40px 0;
 }
 
@@ -16,7 +16,6 @@
 .picture-gallery{
     display: flex;
     gap: 20px;
-    max-width: 100%;
 }
 
 .column{
@@ -25,14 +24,14 @@
     gap: 20px;
 }
 
-.picture{
-    max-width: 120px;
+.picture img{
+    width: 100%;
     height: auto;
     border-radius: 5px;
-    object-fit: contain;
+    object-fit: cover;
 }
 
-@media(max-width: 768px){
+@media(max-width :768px){
     .picture-gallery{
         flex-direction: column;
     }
