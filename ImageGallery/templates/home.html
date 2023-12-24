@@ -4,30 +4,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../static/css/home.css">
   <title>Document</title>
 </head>
 
 <body>
-  <div class="container">
-    <div class="justify-content-center">
-      <form action="/uploads" method="POST" enctype="multipart/form-data">
-        <label for="file">
-          <h3>Image</h3>
-        </label>
-        <div class="flex align-items-center justify-content-center">
-          <input type="file" class="form-control p-1 flex-fill" id="file" name="file">
-          <button type="submit" class="btn btn-sm btn-success rounded-5 ml-2 pt-2 pb-2 pl-4 pr-4" id="btn-submit"><i class="fas fa-plus-circle"></i></button>
-        </div>
-      </form>
+  <div class="header" style="width: vw; display: flex; justify-content: space-between; padding: 10px;">
+    <div style="display: flex; max-width: 100px;">
+      <h1 style="color: aqua;">ART </h1>
+      <h1>GALLERY</h1>
     </div>
+
+    <div style="display: flex; flex-direction: column; justify-self: center; align-items: center;">
+      <h4>Nguyễn Ngọc Bảo Nhân</h4>
+      <h4>Nguyễn Văn Bách</h4>
+      <h4>Đặng Ngọc Nam</h4>
+    </div>
+
+    <div>{{user.username}}</div>
   </div>
-  <div class="d-flex flex-wrap align-items-center justify-content-center mt-2" id="image-list">
-    {% for image in files %}
-    {% include 'image_card.html' %}
-    {% endfor %}
-  </div>
-  <div class="d-flex justify-content-center mt-3" id="pagination">
-    <!-- Các nút phân trang sẽ được thêm vào đây -->
+
+  <div class="container">
+
+    <h2 class="title">Gallery</h2>
+
+    <div class="picture-gallery">
+
+      <div class="column">
+        <div class="picture">
+          <img
+            src="https://static.vecteezy.com/system/resources/thumbnails/009/273/280/small_2x/concept-of-loneliness-and-disappointment-in-love-sad-man-sitting-element-of-the-picture-is-decorated-by-nasa-free-photo.jpg"
+            alt="">
+        </div>
+        <div class="photo">
+          <img
+            src="https://static.vecteezy.com/system/resources/thumbnails/009/273/280/small_2x/concept-of-loneliness-and-disappointment-in-love-sad-man-sitting-element-of-the-picture-is-decorated-by-nasa-free-photo.jpg"
+            alt="">
+        </div>
+        <div class="photo">
+          <img
+            src="https://static.vecteezy.com/system/resources/thumbnails/009/273/280/small_2x/concept-of-loneliness-and-disappointment-in-love-sad-man-sitting-element-of-the-picture-is-decorated-by-nasa-free-photo.jpg"
+            alt="">
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="picture">
+          <img
+            src="https://static.vecteezy.com/system/resources/thumbnails/009/273/280/small_2x/concept-of-loneliness-and-disappointment-in-love-sad-man-sitting-element-of-the-picture-is-decorated-by-nasa-free-photo.jpg"
+            alt="">
+        </div>
+        <div class="photo">
+          <img
+            src="https://static.vecteezy.com/system/resources/thumbnails/009/273/280/small_2x/concept-of-loneliness-and-disappointment-in-love-sad-man-sitting-element-of-the-picture-is-decorated-by-nasa-free-photo.jpg"
+            alt="">
+        </div>
+        <div class="photo">
+          <img
+            src="https://static.vecteezy.com/system/resources/thumbnails/009/273/280/small_2x/concept-of-loneliness-and-disappointment-in-love-sad-man-sitting-element-of-the-picture-is-decorated-by-nasa-free-photo.jpg"
+            alt="">
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="picture">
+          <img
+            src="https://static.vecteezy.com/system/resources/thumbnails/009/273/280/small_2x/concept-of-loneliness-and-disappointment-in-love-sad-man-sitting-element-of-the-picture-is-decorated-by-nasa-free-photo.jpg"
+            alt="">
+        </div>
+        <div class="photo">
+          <img
+            src="https://static.vecteezy.com/system/resources/thumbnails/009/273/280/small_2x/concept-of-loneliness-and-disappointment-in-love-sad-man-sitting-element-of-the-picture-is-decorated-by-nasa-free-photo.jpg"
+            alt="">
+        </div>
+        <div class="photo">
+          <img
+            src="https://static.vecteezy.com/system/resources/thumbnails/009/273/280/small_2x/concept-of-loneliness-and-disappointment-in-love-sad-man-sitting-element-of-the-picture-is-decorated-by-nasa-free-photo.jpg"
+            alt="">
+        </div>
+      </div>
+    </div>
   </div>
 </body>
 
