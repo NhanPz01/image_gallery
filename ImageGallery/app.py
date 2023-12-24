@@ -16,7 +16,12 @@ login_manager.login_view = 'login'
 class File(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(200), nullable=False)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # New field
+
+class Tag(db.Model):
+    id = db.Column(db.Integẻ, primary_key=True)
+    tagname = db.Column(db.String(200), nullable=False)
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -24,14 +29,23 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
     files = db.relationship('File', backref='user', lazy=True)  # New field
+    
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+@login_manager.user_loader
+def create_tags():
+    tags = ['Nature', 'Travel', 'Food', 'Animals', 'People', 'Art']  # List of tag names
+    for tag_name in tags:
+        tag = Tag(name=tag_name)
+        db.session.add(tag)
+    db.session.commit()
+
 with app.app_context():
     db.create_all()
-    
-    
+    create_tags()
+
 @app.route('/')
 def index():
     return redirect(url_for('login'))
