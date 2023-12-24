@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, redirect, render_template, request, send_from_directory
+from flask import Flask, jsonify, redirect, render_template, request, send_from_directory,flash,url_for
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -7,21 +8,64 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'uploads'
 db = SQLAlchemy(app)
-
+app.secret_key = os.urandom(24)
 
 class File(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(200), nullable=False)
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128))
 
 with app.app_context():
     db.create_all()
-
-
+    
+    
 @app.route('/')
 def index():
+    return redirect(url_for('login'))
+
+@app.route('/home')
+def home():
     files = File.query.all()
     return render_template('index.html', files=files)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        email = request.form.get('email')
+        if email:
+            user = User.query.filter_by(email=email).first()
+        else:
+            flash('Email is required')
+            return redirect(url_for('login'))
+
+        if 'register' in request.form:
+            if user:
+                flash('Username already exists')
+                return redirect(url_for('login'))
+            else:
+                new_user = User(username=username, email=email, password_hash=generate_password_hash(password))
+                db.session.add(new_user)
+                db.session.commit()
+                flash('Registration successful')
+                return redirect(url_for('home'))
+
+        elif 'login' in request.form:
+            if user and check_password_hash(user.password_hash, password):
+                flash('Login successful')
+                return redirect(url_for('home'))
+            else:
+                flash('Invalid username or password')
+                return redirect(url_for('login'))
+
+    return render_template('login.html')
+
 
 
 @app.route('/get_images_list')
@@ -42,7 +86,7 @@ def uploads():
             new_file = File(filename=filename)
             db.session.add(new_file)
             db.session.commit()
-            return redirect('/')
+            return redirect('/home')
         return 'something wrong please try again!'
 
 
@@ -66,7 +110,7 @@ def delete(file_id):
     os.remove(file_path)
     db.session.delete(file)
     db.session.commit()
-    return redirect('/')
+    return redirect('/home')
 
 
 if __name__ == '__main__':
