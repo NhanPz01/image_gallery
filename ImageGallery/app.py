@@ -31,10 +31,10 @@ class File(db.Model):
     filename = db.Column(db.String(200), nullable=False)
     title = db.Column(db.String(200))
     data = db.Column(db.LargeBinary)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     upload_time = db.Column(db.DateTime, default=datetime.utcnow)
     tags = db.relationship('Tag', secondary=file_tags, lazy='subquery',
-        backref=db.backref('files', lazy=True))  
+        backref=db.backref('files', lazy=True))
 
 
 class Tag(db.Model):
@@ -68,7 +68,10 @@ with app.app_context():
     # Create admin user
     admin = User.query.filter_by(username='admin').first()
     if not admin:
-        admin = User(username='admin', email='admin@example.com', password_hash=generate_password_hash('123456'), role='admin')
+        admin = User(username='admin',
+                    email='admin@example.com',
+                    password_hash=generate_password_hash('123456'),
+                    role='admin')
         db.session.add(admin)
     db.session.commit()
     
