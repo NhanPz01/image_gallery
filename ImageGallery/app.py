@@ -51,12 +51,13 @@ def load_user(user_id):
 
 # Initialize database and create initial tags
 with app.app_context():
-    db.drop_all()
     db.create_all()
     tags = ['animal', 'mountains', 'funny', 'nature', 'food', 'travel']
     for tag_name in tags:
-        tag = Tag(name=tag_name)
-        db.session.add(tag)
+        tag = Tag.query.filter_by(name=tag_name).first()
+        if not tag:
+            tag = Tag(name=tag_name)
+            db.session.add(tag)
     db.session.commit()
     
 # Define routes
@@ -75,6 +76,7 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+        remember = 'remember' in request.form
         email = request.form.get('email')
         if email:
             user = User.query.filter_by(email=email).first()
@@ -95,7 +97,7 @@ def login():
 
         elif 'login' in request.form:
             if user and check_password_hash(user.password_hash, password):
-                login_user(user)
+                login_user(user, remember=remember)
                 flash('Login successful')
                 return redirect(url_for('home'))
             else:

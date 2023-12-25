@@ -12,11 +12,11 @@
 <body>
   <div class="header">
     <a href="{{ url_for('home') }}">
-      <div style="display: flex; max-width: 100px; font-size:x-large;">
-        <h1 style="color:blue;">A </h1>
-        <h1 style="color:gold;">R </h1>
-        <h1 style="color:crimson;">T </h1>
-        <h1 style="color: white;">GALLERY</h1>
+      <div class="logo">
+        <h1 class="logo-text logo-text-color-blue">A</h1>
+        <h1 class="logo-text logo-text-color-gold">R</h1>
+        <h1 class="logo-text logo-text-color-crimson">T</h1>
+        <h1 class="logo-text">GALLERY</h1>
       </div>
     </a>
 
@@ -29,6 +29,9 @@
       <div style="color: white; text-align: center; margin-right: 20px;">{{ user.username }}</div>
       <div class="navigation">
         <a href="{{ url_for('post') }}" class="nav-button">Share your picture</a>
+      </div>
+      <div class="navigation">
+        <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
       </div>
     </div>
   </div>
