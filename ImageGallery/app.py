@@ -186,8 +186,8 @@ def get_images_by_tag(tag_name):
     if not tag:
         return jsonify({'error': 'Tag not found'}), 404
 
-    # Fetch all files associated with the tag and sort them by upload_time in descending order
-    files = tag.files.order_by(File.upload_time.desc())
+    # Fetch all files associated with the tag
+    files = tag.files
     file_data = []
     for file in files:
         file_data.append({
