@@ -40,6 +40,7 @@
       <div class="row">
         <label class="form-label" for="file">Upload your files</label>
         <input type="file" name="file" id="file" class="form-control rounded-4 files-input" accept="image/*" multiple>
+        <img id="displayImage" class="uploaded-image" src="#" alt="Uploaded Image">
       </div>
       <div class="row">
         <label class="form-label" for="name">Image title</label>
@@ -60,5 +61,20 @@
     </form>
   </div>
 </body>
+
+<script>
+  document.getElementById('file').addEventListener('change', function() {
+    var displayImg = document.getElementById('displayImage');
+    var file = this.files[0];
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      displayImg.src = e.target.result;
+      displayImg.style.display = 'block'; // Show the image after upload
+    };
+
+    reader.readAsDataURL(file);
+  });
+</script>
 
 </html>
