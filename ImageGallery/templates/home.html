@@ -81,25 +81,26 @@
     </div>
 
     <!-- The Modal -->
-    <div id="myModal" style="display: none">
-      <span class="close">&times;</span>
-      <div class="modal-content">
-        <img id="modalImage" src="" alt="Image" />
-        <div>
-          <p id="modalTags">Tags:</p>
-          <p id="modalUsername">Username:</p>
-          <p id="modalUploadTime">Upload Time:</p>
-          <a id="modalDownloadLink" href="">Download</a>
-        </div>
-      </div>
+    <!-- The Modal -->
+<div id="myModal">
+  <span class="close">&times;</span>
+  <div class="modal-content">
+    <img id="modalImage" src="" alt="Image" />
+    <div class="modal-text">
+      <p id="modalTags">Tags:</p>
+      <p id="modalUsername">Username:</p>
+      <p id="modalUploadTime">Upload Time:</p>
+      <a id="modalDownloadLink" href="">Download</a>
     </div>
+  </div>
+</div>
 
     <script>
       // Function to set up event handlers for the modal
       function setupModalEventHandlers() {
         // Get the modal
         var modal = document.getElementById("myModal");
-    
+        var modalContent = document.getElementsByClassName("modal-content")[0];
         // Get the image and insert it inside the modal - use its "alt" text as a caption
         var images = document.getElementsByClassName("picture");
         var modalImg = document.getElementById("modalImage");
@@ -119,8 +120,29 @@
             modal.style.display = "flex";
           };
         }
+        var span = document.getElementsByClassName("close")[0];
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function () {
+        modal.style.display = "none";
+        modalImg.src = "";
+        modalUsername.innerHTML = "";
+        modalUploadTime.innerHTML = "";
+        modalDownloadLink.href = "";
+      };
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+          modalImg.src = "";
+          modalUsername.innerHTML = "";
+          modalUploadTime.innerHTML = "";
+          modalDownloadLink.href = "";
+        }
       }
-    
+      }
+      
       // Call the function to set up the event handlers when the page loads
       setupModalEventHandlers();
     
