@@ -86,11 +86,15 @@
   <div class="modal-content">
     <img id="modalImage" src="" alt="Image" />
     <div class="modal-text">
-      <p id="modalTitle">Title:</p>
-      <p id="modalUsername">Username:</p>
-      <p id="modalUploadTime">Upload Time:</p>
-      <p id="modalTags">Tags:</p>
-      <a id="modalDownloadLink" href="">Download</a>
+      <div class="m-text">
+        <p id="modalTitle" style="font-size: x-large; font-weight: 600;"> </p>
+        <p id="modalUsername"> User:</p>
+        <p id="modalUploadTime"> </p>
+        <p id="modalTags"> Tags:</p>
+      </div>
+      <a id="modalDownloadLink" href="">
+        <img src="../static/pic/downloads.png" alt="" style="height: 24px;">
+      </a>
     </div>
   </div>
 </div>
@@ -111,9 +115,9 @@
           img.onclick = function () {
             modal.style.display = "block";
             modalImg.src = this.src;
-            modalUsername.innerHTML = "Username: " + this.dataset.username;
-            modalUploadTime.innerHTML = "Upload Time: " + this.dataset.uploadTime;
-            modalTitle.innerHTML = "Title: " + this.dataset.title;
+            modalUsername.innerHTML = "User: " + this.dataset.username;
+            modalUploadTime.innerHTML = this.dataset.uploadTime;
+            modalTitle.innerHTML = this.dataset.title;
             modalTags.innerHTML = "Tags: " + this.dataset.tags;
             modalDownloadLink.href = this.src;
             modal.style.display = "flex";
