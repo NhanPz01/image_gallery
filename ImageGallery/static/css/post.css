@@ -1,69 +1,70 @@
-*{
-    margin: 0;
-    padding: 0;
+* {
+  margin: 0;
+  padding: 0;
 }
 
 .header {
-width: vw;
-display: flex;
-justify-content: space-between;
-padding: 10px;
-height: 20%;
-background-color: #10b981;
-font-family: 'VT323';
-margin-bottom: 10px;
+  width: vw;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  height: 20%;
+  background-color: #10b981;
+  font-family: "VT323";
+  margin-bottom: 10px;
+  flex-wrap: wrap; /* Allow items to wrap onto multiple lines */
 }
 
 .nav-button {
-    display: inline-block;
-    padding: 10px 20px;
-    text-decoration: none;
-    background-color: #047857;
-    color: white;
-    border-radius: 5px;
-    margin: 5px;
+  display: inline-block;
+  padding: 10px 20px;
+  text-decoration: none;
+  background-color: #047857;
+  color: white;
+  border-radius: 5px;
+  margin: 5px;
 }
 
 .container {
-    padding: 0px;
-    margin: 10px;
+  padding: 0px;
+  margin: 10px;
 }
 
 .row {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .form-label {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .files-input {
-    color: transparent;
+  color: transparent;
 }
 
 .files-input::-webkit-file-upload-button {
-    visibility: hidden;
+  visibility: hidden;
 }
 
 .files-input::before {
-    content: 'Select files';
-    display: inline-block;
-    background: linear-gradient(top, #f9f9f9, #e3e3e3);
-    border: 1px solid #999;
-    border-radius: 12px;
-    padding: 5px 8px;
-    outline: none;
-    white-space: nowrap;
-    cursor: pointer;
-    text-align: center;
-    font-weight: 700;
+  content: "Select files";
+  display: inline-block;
+  background: linear-gradient(top, #f9f9f9, #e3e3e3);
+  border: 1px solid #999;
+  border-radius: 12px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  cursor: pointer;
+  text-align: center;
+  font-weight: 700;
 }
 
 .files-input:hover::before {
-    border-color: #047857;
-    color: #047857;
+  border-color: #047857;
+  color: #047857;
 }
 
 .files-input:active::before {
-    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
