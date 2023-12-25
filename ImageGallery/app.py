@@ -179,6 +179,27 @@ def delete(file_id):
     db.session.commit()
     return redirect('/home')
 
+@app.route('/tag/<tag_name>')
+def get_images_by_tag(tag_name):
+    # Fetch the tag by name
+    tag = Tag.query.filter_by(name=tag_name).first()
+    if not tag:
+        return jsonify({'error': 'Tag not found'}), 404
+
+    # Fetch all files associated with the tag
+    files = tag.files
+    file_data = []
+    for file in files:
+        file_data.append({
+            'id': file.id,
+            'url': url_for('uploaded_file', file_id=file.id),
+            'filename': file.filename,
+            'upload_time': file.upload_time.strftime('%Y-%m-%d %H:%M:%S'),
+            'username': file.user.username,
+        })
+
+    return jsonify(file_data)
+
 @app.route('/logout')
 @login_required
 def logout():

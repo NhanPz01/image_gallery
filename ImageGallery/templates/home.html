@@ -8,6 +8,7 @@
       href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
       rel="stylesheet"
     />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Document</title>
   </head>
 
@@ -80,7 +81,7 @@
     </div>
 
     <!-- The Modal -->
-    <div id="myModal" style="display: none;">
+    <div id="myModal" style="display: none">
       <span class="close">&times;</span>
       <div class="modal-content">
         <img id="modalImage" src="" alt="Image" />
@@ -113,6 +114,7 @@
           modalUploadTime.innerHTML = "Upload Time: " + this.dataset.uploadTime;
           modalTags.innerHTML = "Tags: " + this.dataset.tags;
           modalDownloadLink.href = this.src;
+          modal.style.display = "flex";
         };
       }
 
@@ -138,6 +140,30 @@
           modalDownloadLink.href = "";
         }
       };
+      $(document).ready(function () {
+        $(".tag").click(function () {
+          var tag_name = $(this).text();
+          $.get("/tag/" + tag_name, function (data) {
+            // Clear the image gallery
+            $(".picture-gallery").empty();
+
+            // Add each image to the gallery
+            data.forEach(function (image) {
+              $(".picture-gallery").append(
+                '<div class="picture"><img src="' +
+                  image.url +
+                  '" alt="' +
+                  image.filename +
+                  '" data-username="' +
+                  image.username +
+                  '" data-upload-time="' +
+                  image.upload_time +
+                  '" /></div>'
+              );
+            });
+          });
+        });
+      });
     </script>
   </body>
 </html>
