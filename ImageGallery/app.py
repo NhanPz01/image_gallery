@@ -115,7 +115,7 @@ def get_images_list():
 @login_required
 def post():
     # Your code here
-    return render_template('post.html')
+    return render_template('post.html',user=current_user)
 
 @app.route('/uploads', methods=['POST'])
 @login_required
