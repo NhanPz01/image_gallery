@@ -1,0 +1,180 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.logo {
+  display: flex;
+  max-width: 100px;
+}
+
+.logo-text {
+  font-size: min(4vw, 40px);
+  color: white;
+}
+
+.logo-text-color-blue {
+  color: blue;
+}
+
+.logo-text-color-gold {
+  color: gold;
+}
+
+.logo-text-color-crimson {
+  color: crimson;
+}
+
+.header {
+  width: vw;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  height: 20%;
+  background-color: #10b981;
+  font-family: "VT323";
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.nav-button {
+  display: inline-block;
+  padding: 10px 20px;
+  text-decoration: none;
+  background-color: #047857;
+  color: white;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+.nav-button:hover {
+  background-color: #1c805e;
+}
+
+.logout-button {
+  display: inline-block;
+  padding: 10px 20px;
+  text-decoration: none;
+  background-color: #dc2626;
+  color: white;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+.logout-button:hover {
+  background-color: #ef4444;
+}
+
+/* The Modal (background) */
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  display: flex; /* NEW: Display as Flex */
+  align-items: center; /* NEW: Center items vertically */
+  justify-content: center; /* NEW: Center items horizontally */
+}
+
+/* Modal Content (image) */
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+}
+
+/* Add Animation */
+.modal-content {
+  -webkit-animation-name: zoom;
+  -webkit-animation-duration: 0.6s;
+  animation-name: zoom;
+  animation-duration: 0.6s;
+}
+
+@-webkit-keyframes zoom {
+  from {
+    -webkit-transform: scale(0);
+  }
+  to {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes zoom {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* The Close Button */
+.close {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #4caf50;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+td a {
+  color: #333;
+  text-decoration: none;
+}
+
+td form {
+  display: inline;
+}
+
+td form input[type="submit"] {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}

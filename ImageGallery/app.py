@@ -19,44 +19,43 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-# Define the association table
+
 file_tags = db.Table('file_tags',
     db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), primary_key=True),
     db.Column('file_id', db.Integer, db.ForeignKey('file.id'), primary_key=True)
 )
 
-# Define the File class
-
 
 class File(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(200), nullable=False)
-    title = db.Column(db.String(200))  # New field for title
-    data = db.Column(db.LargeBinary)  # Field to store binary data
+    title = db.Column(db.String(200))
+    data = db.Column(db.LargeBinary)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  
-    upload_time = db.Column(db.DateTime, default=datetime.utcnow)  # New field
+    upload_time = db.Column(db.DateTime, default=datetime.utcnow)
     tags = db.relationship('Tag', secondary=file_tags, lazy='subquery',
         backref=db.backref('files', lazy=True))  
 
-# Define the Tag class
+
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
 
-# Define the User class
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
-    files = db.relationship('File', backref='user', lazy=True)  # New field
+    role = db.Column(db.String(50), default='user')
+    files = db.relationship('File', backref='user', lazy=True)
 
-# User loader for LoginManager
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Initialize database and create initial tags
+
 with app.app_context():
     db.drop_all()
     db.create_all()
@@ -66,9 +65,14 @@ with app.app_context():
         if not tag:
             tag = Tag(name=tag_name)
             db.session.add(tag)
+    # Create admin user
+    admin = User.query.filter_by(username='admin').first()
+    if not admin:
+        admin = User(username='admin', email='admin@example.com', password_hash=generate_password_hash('123456'), role='admin')
+        db.session.add(admin)
     db.session.commit()
     
-# Define routes
+
 @app.route('/')
 def index():
     return redirect(url_for('login'))
@@ -79,19 +83,39 @@ def home():
     files = File.query.order_by(File.upload_time.desc()).all()
     file_data = []
     for file in files:
-        title = file.title  # Fetch title of the file
-        tags = [tag.name for tag in file.tags]  # Fetch tags for this file
-        username = file.user.username  # Fetch username of the uploader
-        upload_time = file.upload_time  # Fetch upload time
+        title = file.title
+        tags = [tag.name for tag in file.tags]
+        username = file.user.username
+        upload_time = file.upload_time
         file_data.append({
             'file': file,
-            'title': title,  # Include title
+            'title': title,
             'tags': tags,
             'username': username,
             'upload_time': upload_time.strftime('%Y-%m-%d %H:%M:%S'),
         })
     return render_template('home.html', file_data=file_data, user=current_user, tags=Tag.query.all())
 
+@app.route('/admin_home')
+@login_required
+def admin_home():
+    if current_user.role != 'admin':
+        abort(403)
+    files = File.query.order_by(File.upload_time.desc()).all()
+    file_data = []
+    for file in files:
+        title = file.title
+        tags = [tag.name for tag in file.tags]
+        username = file.user.username
+        upload_time = file.upload_time
+        file_data.append({
+            'file': file,
+            'title': title,
+            'tags': tags,
+            'username': username,
+            'upload_time': upload_time.strftime('%Y-%m-%d %H:%M:%S'),
+        })
+    return render_template('admin_home.html', file_data=file_data, user=current_user, tags=Tag.query.all())
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -106,6 +130,17 @@ def login():
             flash('Email is required')
             return redirect(url_for('login'))
 
+        if 'login' in request.form:
+            if user and check_password_hash(user.password_hash, password):
+                login_user(user, remember=remember)
+                flash('Login successful')
+                if user.role == 'admin':
+                    return redirect(url_for('admin_home'))
+                else:
+                    return redirect(url_for('home'))
+            else:
+                flash('Invalid username or password')
+                return redirect(url_for('login'))
         if 'register' in request.form:
             if user:
                 flash('Username already exists')
@@ -116,15 +151,6 @@ def login():
                 db.session.commit()
                 flash('Registration successful')
                 return redirect(url_for('home'))
-
-        elif 'login' in request.form:
-            if user and check_password_hash(user.password_hash, password):
-                login_user(user, remember=remember)
-                flash('Login successful')
-                return redirect(url_for('home'))
-            else:
-                flash('Invalid username or password')
-                return redirect(url_for('login'))
 
     return render_template('login.html')
 
@@ -138,7 +164,6 @@ def get_images_list():
 @app.route('/post', methods=['GET', 'POST'])
 @login_required
 def post():
-    # Your code here
     return render_template('post.html',user=current_user, tags=Tag.query.all())
 
 @app.route('/uploads', methods=['POST'])
@@ -146,16 +171,16 @@ def post():
 def uploads():
     if request.method == 'POST':
         file = request.files['file']
-        title = request.form.get('title')  # Get the title from the form data
-        tags = request.form.getlist('tags')  # Get the list of tags from the form data
+        title = request.form.get('title')
+        tags = request.form.getlist('tags')
         if file:
             filename = file.filename
             file_data = file.read()
-            new_file = File(filename=filename, title=title, data=file_data, user_id=current_user.id)  # Include title
+            new_file = File(filename=filename, title=title, data=file_data, user_id=current_user.id)
             for tag_name in tags:
                 tag = Tag.query.filter_by(name=tag_name).first()
                 if tag:
-                    new_file.tags.append(tag)  # Associate the tag with the file
+                    new_file.tags.append(tag)
             db.session.add(new_file)
             db.session.commit()
             return redirect('/home')
@@ -193,7 +218,7 @@ def delete_image(file_id):
     file = File.query.get(file_id)
     if file is None:
         abort(404)
-    if file.user_id != current_user.id:
+    if file.user_id != current_user.id and current_user.role != 'admin':
         abort(403)
     db.session.delete(file)
     db.session.commit()
@@ -201,12 +226,9 @@ def delete_image(file_id):
 
 @app.route('/tag/<tag_name>')
 def get_images_by_tag(tag_name):
-    # Fetch the tag by name
     tag = Tag.query.filter_by(name=tag_name).first()
     if not tag:
         return jsonify({'error': 'Tag not found'}), 404
-
-    # Fetch all files associated with the tag
     files = tag.files
     file_data = []
     for file in files:
@@ -226,13 +248,13 @@ def my_posts():
     files = File.query.filter_by(user_id=current_user.id).order_by(File.upload_time.desc()).all()
     file_data = []
     for file in files:
-        title = file.title  # Fetch title of the file
-        tags = [tag.name for tag in file.tags]  # Fetch tags for this file
-        username = file.user.username  # Fetch username of the uploader
-        upload_time = file.upload_time  # Fetch upload time
+        title = file.title
+        tags = [tag.name for tag in file.tags]
+        username = file.user.username
+        upload_time = file.upload_time
         file_data.append({
             'file': file,
-            'title': title,  # Include title
+            'title': title,
             'tags': tags,
             'username': username,
             'upload_time': upload_time.strftime('%Y-%m-%d %H:%M:%S'),

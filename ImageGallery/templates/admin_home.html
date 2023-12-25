@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../static/css/admin_home.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div class="header">
+      <a href="{{ url_for('home') }}">
+        <div class="logo">
+          <h1 class="logo-text logo-text-color-blue">A</h1>
+          <h1 class="logo-text logo-text-color-gold">R</h1>
+          <h1 class="logo-text logo-text-color-crimson">T</h1>
+          <h1 class="logo-text">GALLERY</h1>
+        </div>
+      </a>
+
+      <div
+        style="
+          display: flex;
+          flex-direction: column;
+          justify-self: center;
+          align-items: center;
+          color: white;
+        "
+      >
+        <h4 style="font-weight: 100">Nguyễn Ngọc Bảo Nhân</h4>
+        <h4 style="font-weight: 100">Nguyễn Văn Bách</h4>
+        <h4 style="font-weight: 100">Đặng Ngọc Nam</h4>
+      </div>
+      <div style="display: flex; align-items: center">
+        <div style="color: white; text-align: center; margin-right: 20px">
+          <a href="{{ url_for('my_posts') }}">{{ user.username }}</a>
+        </div>
+        <div class="navigation">
+          <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+        </div>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Image ID</th>
+          <th>Ảnh (nhấn vào để xem)</th>
+          <th>Tiêu đề</th>
+          <th>Đăng bởi</th>
+          <th>Đăng vào lúc</th>
+          <th>Tags</th>
+          <th>-</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for file in file_data %}
+        <tr>
+          <td>{{ file.file.id }}</td>
+          <td>
+            <a
+              href="#"
+              class="image-link"
+              data-image-url="{{ url_for('uploaded_file', file_id=file.file.id) }}"
+            >
+              {{ file.file.id }}
+            </a>
+          </td>
+          <td>{{ file.file.title }}</td>
+          <td>{{ file.username }}</td>
+          <td>{{ file.upload_time }}</td>
+          <td>{{ file.tags|join(', ') }}</td>
+          <td>
+            <form
+              action="{{ url_for('delete_image', file_id=file.file.id) }}"
+              method="post"
+            >
+              <input type="submit" value="Delete" />
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div id="imageModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img id="modalImage" src="" alt="Image" />
+      </div>
+    </div>
+    <script>
+      var modal = document.getElementById("imageModal");
+      var modalImg = document.getElementById("modalImage");
+      var links = document.querySelectorAll("a.image-link");
+      links.forEach(function (link) {
+        link.onclick = function (e) {
+          e.preventDefault();
+          var imageUrl = this.getAttribute("data-image-url");
+          modalImg.src = imageUrl;
+          modal.style.display = "block";
+        };
+      });
+      var span = document.getElementsByClassName("close")[0];
+      span.onclick = function () {
+        modal.style.display = "none";
+      };
+    </script>
+  </body>
+</html>
