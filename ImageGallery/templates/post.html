@@ -39,22 +39,20 @@
     <form action="{{ url_for('uploads') }}" method="post" enctype="multipart/form-data">
       <div class="row">
         <label class="form-label" for="file">Upload your files</label>
-        <input type="file" name="file" id="file" class="form-control files-input" accept="image/*" multiple>
+        <input type="file" name="file" id="file" class="form-control rounded-4 files-input" accept="image/*" multiple>
       </div>
       <div class="row">
         <label class="form-label" for="name">Image title</label>
-        <input class="form-control" type="text" placeholder="Name..." id="name">
+        <input class="form-control rounded-4" type="text" placeholder="Name..." id="name">
       </div>
       <div class="row">
-        <label class="form-label" for="tag">Image tag</label>
-        <select class="form-select" name="tag" id="tag">
-          <option value="">Select image tag...</option>
-          {% for tag in tags %}
-          <option value="{{ tag.name }}">
-            {{ tag.name }}
-          </option>
-          {% endfor %}
-        </select>
+        <label class="form-label">Image tag</label>
+        {% for tag in tags %}
+        <div class="form-check">
+          <input class="form-check-input tag-checkbox" type="checkbox" value="{{tag.name}}" id="{{tag.name}}_id">
+          <label class="form-check-label" for="{{tag.name}}_id">{{tag.name}}</label>
+        </div>
+        {% endfor %}
       </div>
       <div class="flex justify-content-end">
         <input type="submit" class="btn btn-success pr-0 mr-0" value="Upload">
