@@ -3,10 +3,34 @@
 * {
 	box-sizing: border-box;
 }
+
+.logo {
+	display: flex;
+	max-width: 100px;
+  }
+  
+  .logo-text {
+	font-size: min(4vw, 40px);
+  }
+  
+  .logo-text-color-blue {
+	color: blue;
+  }
+  
+  .logo-text-color-gold {
+	color: gold;
+  }
+  
+  .logo-text-color-crimson {
+	color: crimson;
+  }
+
 .alert {
     /* Other styles... */
     position: relative; /* or absolute, depending on your layout */
     z-index: 1000; /* Adjust this value as needed */
+	color: crimson;
+	margin: 5px;
   }
 body {
 	background: #f6f5f7;
@@ -49,8 +73,8 @@ a {
 
 button {
 	border-radius: 20px;
-	border: 1px solid #FF4B2B;
-	background-color: #FF4B2B;
+	border: 1px solid #1682fe;
+	background-color: #1682fe;
 	color: #FFFFFF;
 	font-size: 12px;
 	font-weight: bold;
@@ -163,9 +187,9 @@ input {
 }
 
 .overlay {
-	background: #FF416C;
-	background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
-	background: linear-gradient(to right, #FF4B2B, #FF416C);
+	background: #39aef7;
+	background: -webkit-linear-gradient(to right, #1682fe, #39aef7);
+	background: linear-gradient(to right, #1682fe, #39aef7);
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 0 0;

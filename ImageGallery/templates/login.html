@@ -24,12 +24,7 @@
             {% endwith %}
             <form action="{{ url_for('login') }}" method="post">
                 <h1>Đăng ký</h1>
-                <div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-                <span>hoặc dùng email để đăng ký</span>
+                <span>Dùng email để đăng ký</span>
                 <input type="text" placeholder="Name" name="username" />
                 <input type="email" placeholder="Email" name="email" />
                 <input type="password" placeholder="Password" name="password" />
@@ -49,12 +44,13 @@
             {% endwith %}
             <form action="{{ url_for('login') }}" method="post">
                 <h1>Đăng nhập</h1>
-                <div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                <div class="logo">
+                    <h1 class="logo-text logo-text-color-blue">A</h1>
+                    <h1 class="logo-text logo-text-color-gold">R</h1>
+                    <h1 class="logo-text logo-text-color-crimson">T</h1>
+                    
                 </div>
-                <span>Đã có tài khoản?</span>
+                <h1 class="logo-text">GALLERY</h1>
                 <input type="email" placeholder="Email" name="email" />
                 <input type="password" placeholder="Password" name="password" />
                 <a href="#">Quên mật khẩu?</a>
