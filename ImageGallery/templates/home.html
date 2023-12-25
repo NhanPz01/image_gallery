@@ -95,58 +95,42 @@
     </div>
 
     <script>
-      // Get the modal
-      var modal = document.getElementById("myModal");
-
-      // Get the image and insert it inside the modal - use its "alt" text as a caption
-      var images = document.getElementsByClassName("picture");
-      var modalImg = document.getElementById("modalImage");
-      var modalUsername = document.getElementById("modalUsername");
-      var modalUploadTime = document.getElementById("modalUploadTime");
-      var modalTags = document.getElementById("modalTags");
-      var modalDownloadLink = document.getElementById("modalDownloadLink");
-      for (var i = 0; i < images.length; i++) {
-        var img = images[i].getElementsByTagName("img")[0];
-        img.onclick = function () {
-          modal.style.display = "block";
-          modalImg.src = this.src;
-          modalUsername.innerHTML = "Username: " + this.dataset.username;
-          modalUploadTime.innerHTML = "Upload Time: " + this.dataset.uploadTime;
-          modalTags.innerHTML = "Tags: " + this.dataset.tags;
-          modalDownloadLink.href = this.src;
-          modal.style.display = "flex";
-        };
-      }
-
-      // Get the <span> element that closes the modal
-      var span = document.getElementsByClassName("close")[0];
-
-      // When the user clicks on <span> (x), close the modal
-      span.onclick = function () {
-        modal.style.display = "none";
-        modalImg.src = "";
-        modalUsername.innerHTML = "";
-        modalUploadTime.innerHTML = "";
-        modalDownloadLink.href = "";
-      };
-
-      // When the user clicks anywhere outside of the modal, close it
-      window.onclick = function (event) {
-        if (event.target == modal) {
-          modal.style.display = "none";
-          modalImg.src = "";
-          modalUsername.innerHTML = "";
-          modalUploadTime.innerHTML = "";
-          modalDownloadLink.href = "";
+      // Function to set up event handlers for the modal
+      function setupModalEventHandlers() {
+        // Get the modal
+        var modal = document.getElementById("myModal");
+    
+        // Get the image and insert it inside the modal - use its "alt" text as a caption
+        var images = document.getElementsByClassName("picture");
+        var modalImg = document.getElementById("modalImage");
+        var modalUsername = document.getElementById("modalUsername");
+        var modalUploadTime = document.getElementById("modalUploadTime");
+        var modalTags = document.getElementById("modalTags");
+        var modalDownloadLink = document.getElementById("modalDownloadLink");
+        for (var i = 0; i < images.length; i++) {
+          var img = images[i].getElementsByTagName("img")[0];
+          img.onclick = function () {
+            modal.style.display = "block";
+            modalImg.src = this.src;
+            modalUsername.innerHTML = "Username: " + this.dataset.username;
+            modalUploadTime.innerHTML = "Upload Time: " + this.dataset.uploadTime;
+            modalTags.innerHTML = "Tags: " + this.dataset.tags;
+            modalDownloadLink.href = this.src;
+            modal.style.display = "flex";
+          };
         }
-      };
+      }
+    
+      // Call the function to set up the event handlers when the page loads
+      setupModalEventHandlers();
+    
       $(document).ready(function () {
         $(".tag").click(function () {
           var tag_name = $(this).text();
           $.get("/tag/" + tag_name, function (data) {
             // Clear the image gallery
             $(".picture-gallery").empty();
-
+    
             // Add each image to the gallery
             data.forEach(function (image) {
               $(".picture-gallery").append(
@@ -161,6 +145,9 @@
                   '" /></div>'
               );
             });
+    
+            // Set up the event handlers for the new images
+            setupModalEventHandlers();
           });
         });
       });
