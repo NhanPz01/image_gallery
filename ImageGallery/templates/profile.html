@@ -100,27 +100,25 @@
           <img id="modalImage" src="" alt="Image" />
           <div class="modal-text">
             <div>
+              <p id="modalTitle" style="font-size: x-large; font-weight: 800;"></p>
               <p id="modalTags">Tags:</p>
-              <p id="modalTitle">Title:</p>
               <p id="modalUsername">Username:</p>
               <p id="modalUploadTime">Upload Time:</p>
               <!-- Form to change the image title -->
-              <form id="changeTitleForm" method="post">
-                <input
-                  type="text"
-                  id="newTitle"
-                  name="newTitle"
-                  placeholder="New image title"
-                />
+              <form class="change-title" id="changeTitleForm" method="post">
+                <input class="inp-text" type="text" id="newTitle" name="newTitle" placeholder="New image title">
                 <input type="submit" value="Change image title" />
               </form>
               <!-- Form to delete the image -->
-              <form id="deleteImageForm" method="post">
-                <input type="submit" value="Delete image" />
-              </form>
+              
             </div>
             <a id="modalDownloadLink" href="">
               <img src="../static/pic/downloads.png" alt="" style="height: 24px;">
+              <form id="deleteImageForm" method="post">
+                <button type="submit" style="background: transparent; border: none;">
+                  <img src="../static/pic/erase.png" alt="" style="height: 24px;">
+                </button>
+              </form>
             </a>
           </div>
         </div>
