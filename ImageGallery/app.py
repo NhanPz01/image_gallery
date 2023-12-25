@@ -3,6 +3,7 @@ from flask import Flask, jsonify, redirect, render_template, request, send_from_
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 import os
 
 # Initialize Flask app
@@ -25,13 +26,16 @@ file_tags = db.Table('file_tags',
 )
 
 # Define the File class
+
+
 class File(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(200), nullable=False)
     data = db.Column(db.LargeBinary)  # New field to store binary data
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  
+    upload_time = db.Column(db.DateTime, default=datetime.utcnow)  # New field
     tags = db.relationship('Tag', secondary=file_tags, lazy='subquery',
-        backref=db.backref('files', lazy=True))  
+        backref=db.backref('files', lazy=True))   
 
 # Define the Tag class
 class Tag(db.Model):
@@ -72,7 +76,18 @@ def index():
 @login_required
 def home():
     files = File.query.all()
-    return render_template('home.html', files=files, user=current_user, tags=Tag.query.all())
+    file_data = []
+    for file in files:
+        tags = [tag.name for tag in file.tags]  # Fetch tags for this file
+        username = file.user.username  # Fetch username of the uploader
+        upload_time = file.upload_time  # Fetch upload time
+        file_data.append({
+            'file': file,
+            'tags': tags,
+            'username': username,
+            'upload_time': upload_time.strftime('%Y-%m-%d %H:%M:%S'),
+        })
+    return render_template('home.html', file_data=file_data, user=current_user, tags=Tag.query.all())
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

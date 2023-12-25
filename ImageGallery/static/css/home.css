@@ -1,123 +1,192 @@
-*{
-        margin: 0;
-        padding: 0;
+* {
+  margin: 0;
+  padding: 0;
 }
 
 .header {
-    width: vw;
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    height: 20%;
-    background-color: #10b981;
-    font-family: 'VT323';
-    margin-bottom: 10px;
-    flex-wrap: wrap; /* Allow items to wrap onto multiple lines */
+  width: vw;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  height: 20%;
+  background-color: #10b981;
+  font-family: "VT323";
+  margin-bottom: 10px;
+  flex-wrap: wrap; /* Allow items to wrap onto multiple lines */
 }
 
-.tag{
-    font-family: 'VT323';
-    font-size: larger;
-    width: 100px;
-    height: 30px;
-    color: white;
-    background-color: #047857;
-    text-align: center;
-    align-items: center;
-    padding-top: 7px;
-    border-radius: 9px;
+.tag {
+  font-family: "VT323";
+  font-size: larger;
+  width: 100px;
+  height: 30px;
+  color: white;
+  background-color: #047857;
+  text-align: center;
+  align-items: center;
+  padding-top: 7px;
+  border-radius: 9px;
 }
 
 .nav-button {
-    display: inline-block;
-    padding: 10px 20px;
-    text-decoration: none;
-    background-color: #047857;
-    color: white;
-    border-radius: 5px;
-    margin: 5px;
+  display: inline-block;
+  padding: 10px 20px;
+  text-decoration: none;
+  background-color: #047857;
+  color: white;
+  border-radius: 5px;
+  margin: 5px;
 }
 
 .nav-button:hover {
-    background-color: #1c805e;
+  background-color: #1c805e;
 }
 
 .logout-button {
-    display: inline-block;
-    padding: 10px 20px;
-    text-decoration: none;
-    background-color: #dc2626;
-    color: white;
-    border-radius: 5px;
-    margin: 5px;
+  display: inline-block;
+  padding: 10px 20px;
+  text-decoration: none;
+  background-color: #dc2626;
+  color: white;
+  border-radius: 5px;
+  margin: 5px;
 }
 
 .logout-button:hover {
-    background-color: #ef4444;
+  background-color: #ef4444;
 }
 
 .container {
-    width: 100%;
-    margin: 10px;
+  width: 100%;
+  margin: 10px;
 }
 
 .picture-gallery {
-    column-count: 3;
-    column-gap: 10px;
+  column-count: 3;
+  column-gap: 10px;
 }
 
 .picture {
-    display: inline-block;
-    width: 100%;
-    margin-bottom: 10px;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .picture img {
-    width: 100%;
-    height: auto;
-    border-radius: 7px;
-    object-fit: cover;
+  width: 100%;
+  height: auto;
+  border-radius: 7px;
+  object-fit: cover;
 }
 
 .logo {
-    display: flex;
-    max-width: 100px;
+  display: flex;
+  max-width: 100px;
+}
+
+.logo-text {
+  font-size: min(4vw, 40px);
+  color: white;
+}
+
+.logo-text-color-blue {
+  color: blue;
+}
+
+.logo-text-color-gold {
+  color: gold;
+}
+
+.logo-text-color-crimson {
+  color: crimson;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* The Modal (background) */
+#myModal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    display: flex; /* Will "activate" flexbox */
+    align-items: center; /* Align vertical */
+    justify-content: center; /* Align horizontal */
   }
   
-  .logo-text {
-    font-size: min(4vw, 40px);
-    color: white;
-  }
-  
-  .logo-text-color-blue {
-    color: blue;
-  }
-  
-  .logo-text-color-gold {
-    color: gold;
-  }
-  
-  .logo-text-color-crimson {
-    color: crimson;
+  .modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
   }
 
-@media(max-width :768px){
-        .picture-gallery{
-                column-count: 1;
-        }
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .modal-content img {
+    grid-column: 1;
+  }
+  
+  .modal-content div {
+    grid-column: 2;
+  }
+
+@media (max-width: 768px) {
+  .picture-gallery {
+    column-count: 1;
+  }
 }
 @media screen and (max-width: 600px) {
-    .header {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-    .header > div {
-      margin: 10px 0;
-    }
-    .nav-button, .logout-button {
-      width: 80%;
-      font-size: 3vw;
-      padding: 5px 0;
-    }
+  .header {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
+  .header > div {
+    margin: 10px 0;
+  }
+  .nav-button,
+  .logout-button {
+    width: 80%;
+    font-size: 3vw;
+    padding: 5px 0;
+  }
+}
