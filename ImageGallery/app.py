@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, redirect, render_template, request, send_from_directory, flash, url_for
+import io
+from flask import Flask, jsonify, redirect, render_template, request, send_from_directory, flash, url_for, send_file, Response
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
@@ -27,9 +28,10 @@ file_tags = db.Table('file_tags',
 class File(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(200), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # Existing field
+    data = db.Column(db.LargeBinary)  # New field to store binary data
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  
     tags = db.relationship('Tag', secondary=file_tags, lazy='subquery',
-        backref=db.backref('files', lazy=True))  # New field
+        backref=db.backref('files', lazy=True))  
 
 # Define the Tag class
 class Tag(db.Model):
@@ -51,6 +53,7 @@ def load_user(user_id):
 
 # Initialize database and create initial tags
 with app.app_context():
+    db.drop_all()
     db.create_all()
     tags = ['animal', 'mountains', 'funny', 'nature', 'food', 'travel']
     for tag_name in tags:
@@ -124,18 +127,26 @@ def post():
 def uploads():
     if request.method == 'POST':
         file = request.files['file']
+        tags = request.form.getlist('tags')  # Get the list of tags from the form data
         if file:
             filename = file.filename
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            new_file = File(filename=filename, user_id=current_user.id)  # Set the user_id field
+            file_data = file.read()
+            new_file = File(filename=filename, data=file_data, user_id=current_user.id)
+            for tag_name in tags:
+                tag = Tag.query.filter_by(name=tag_name).first()
+                if tag:
+                    new_file.tags.append(tag)  # Associate the tag with the file
             db.session.add(new_file)
             db.session.commit()
             return redirect('/home')
     return 'something wrong please try again!'
 
-@app.route('/uploaded_file/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+@app.route('/uploaded_file/<int:file_id>')
+def uploaded_file(file_id):
+    file = File.query.get_or_404(file_id)
+    response = Response(file.data, mimetype="image/jpeg")
+    response.headers.set('Content-Disposition', 'attachment', filename=file.filename)
+    return response
 
 @app.route('/download/<int:file_id>')
 def download(file_id):
