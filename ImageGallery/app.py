@@ -1,5 +1,5 @@
 import io
-from flask import Flask, jsonify, redirect, render_template, request, send_from_directory, flash, url_for, send_file, Response
+from flask import Flask, abort, jsonify, redirect, render_template, request, send_from_directory, flash, url_for, send_file, Response
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
@@ -31,11 +31,12 @@ file_tags = db.Table('file_tags',
 class File(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(200), nullable=False)
-    data = db.Column(db.LargeBinary)  # New field to store binary data
+    title = db.Column(db.String(200))  # New field for title
+    data = db.Column(db.LargeBinary)  # Field to store binary data
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  
     upload_time = db.Column(db.DateTime, default=datetime.utcnow)  # New field
     tags = db.relationship('Tag', secondary=file_tags, lazy='subquery',
-        backref=db.backref('files', lazy=True))   
+        backref=db.backref('files', lazy=True))  
 
 # Define the Tag class
 class Tag(db.Model):
@@ -78,16 +79,19 @@ def home():
     files = File.query.order_by(File.upload_time.desc()).all()
     file_data = []
     for file in files:
+        title = file.title  # Fetch title of the file
         tags = [tag.name for tag in file.tags]  # Fetch tags for this file
         username = file.user.username  # Fetch username of the uploader
         upload_time = file.upload_time  # Fetch upload time
         file_data.append({
             'file': file,
+            'title': title,  # Include title
             'tags': tags,
             'username': username,
             'upload_time': upload_time.strftime('%Y-%m-%d %H:%M:%S'),
         })
     return render_template('home.html', file_data=file_data, user=current_user, tags=Tag.query.all())
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -142,11 +146,12 @@ def post():
 def uploads():
     if request.method == 'POST':
         file = request.files['file']
+        title = request.form.get('title')  # Get the title from the form data
         tags = request.form.getlist('tags')  # Get the list of tags from the form data
         if file:
             filename = file.filename
             file_data = file.read()
-            new_file = File(filename=filename, data=file_data, user_id=current_user.id)
+            new_file = File(filename=filename, title=title, data=file_data, user_id=current_user.id)  # Include title
             for tag_name in tags:
                 tag = Tag.query.filter_by(name=tag_name).first()
                 if tag:
@@ -168,16 +173,31 @@ def download(file_id):
     file = File.query.get_or_404(file_id)
     return send_from_directory(app.config['UPLOAD_FOLDER'], file.filename, as_attachment=True)
 
-@app.route('/delete/<int:file_id>')
-def delete(file_id):
-    file = File.query.get_or_404(file_id)
-    filename = file.filename
+@app.route('/change_image_title/<int:file_id>', methods=['POST'])
+@login_required
+def change_image_title(file_id):
+    new_title = request.form.get('newTitle')
+    if not new_title:
+        flash('New title is required')
+        return redirect(url_for('my_posts'))
+    file = File.query.get(file_id)
+    if file.user_id != current_user.id:
+        abort(403)
+    file.title = new_title
+    db.session.commit()
+    return redirect(url_for('my_posts'))
 
-    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    os.remove(file_path)
+@app.route('/delete_image/<int:file_id>', methods=['POST'])
+@login_required
+def delete_image(file_id):
+    file = File.query.get(file_id)
+    if file is None:
+        abort(404)
+    if file.user_id != current_user.id:
+        abort(403)
     db.session.delete(file)
     db.session.commit()
-    return redirect('/home')
+    return redirect(url_for('my_posts'))
 
 @app.route('/tag/<tag_name>')
 def get_images_by_tag(tag_name):
@@ -199,6 +219,25 @@ def get_images_by_tag(tag_name):
         })
 
     return jsonify(file_data)
+
+@app.route('/my_posts')
+@login_required
+def my_posts():
+    files = File.query.filter_by(user_id=current_user.id).order_by(File.upload_time.desc()).all()
+    file_data = []
+    for file in files:
+        title = file.title  # Fetch title of the file
+        tags = [tag.name for tag in file.tags]  # Fetch tags for this file
+        username = file.user.username  # Fetch username of the uploader
+        upload_time = file.upload_time  # Fetch upload time
+        file_data.append({
+            'file': file,
+            'title': title,  # Include title
+            'tags': tags,
+            'username': username,
+            'upload_time': upload_time.strftime('%Y-%m-%d %H:%M:%S'),
+        })
+    return render_template('profile.html', file_data=file_data, user=current_user, tags=Tag.query.all())
 
 @app.route('/logout')
 @login_required
