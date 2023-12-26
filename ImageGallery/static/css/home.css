@@ -83,11 +83,10 @@
 .logo {
   display: flex;
   max-width: 100px;
-  justify-content: center;
 }
 
 .logo-text {
-  font-size: large;
+  font-size: min(4vw, 40px);
   color: white;
 }
 

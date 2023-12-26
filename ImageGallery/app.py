@@ -57,7 +57,6 @@ def load_user(user_id):
 
 
 with app.app_context():
-    db.drop_all()
     db.create_all()
     tags = ['animal', 'mountains', 'funny', 'nature', 'food', 'travel']
     for tag_name in tags:
