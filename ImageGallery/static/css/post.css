@@ -39,6 +39,10 @@
 }
 
 .files-input {
+  margin-bottom: 20px;
+}
+
+.files-input {
   color: transparent;
 }
 
@@ -47,7 +51,7 @@
 }
 
 .files-input::before {
-  content: "Select files";
+  content: "Select file";
   display: inline-block;
   background: linear-gradient(top, #f9f9f9, #e3e3e3);
   border: 1px solid #999;
@@ -70,7 +74,7 @@
 }
 .uploaded-image {
   max-width: 100%;
-  height: auto;
-  margin-top: 20px;
+  height: 300px;
   display: none;
+  object-fit: contain;
 }

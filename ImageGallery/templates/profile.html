@@ -32,9 +32,9 @@
           color: white;
         "
       >
-        <h4 style="font-weight: 100">Nguyễn Ngọc Bảo Nhân</h4>
-        <h4 style="font-weight: 100">Nguyễn Văn Bách</h4>
-        <h4 style="font-weight: 100">Đặng Ngọc Nam</h4>
+      <h4 style="font-weight: 100; font-size: 16px; margin: 0">Nguyễn Ngọc Bảo Nhân</h4>
+      <h4 style="font-weight: 100; font-size: 16px; margin: 0">Nguyễn Văn Bách</h4>
+      <h4 style="font-weight: 100; font-size: 16px; margin: 0">Đặng Ngọc Nam</h4>
       </div>
       <div style="display: flex; align-items: center">
         <div style="color: white; text-align: center; margin-right: 20px">
@@ -109,14 +109,15 @@
                 <input
                   type="text"
                   id="newTitle"
+                  class="input-control"
                   name="newTitle"
                   placeholder="New image title"
                 />
-                <input type="submit" value="Change image title" />
+                <input class="edit-button" type="submit" value="Change image title" />
               </form>
               <!-- Form to delete the image -->
               <form id="deleteImageForm" method="post">
-                <input type="submit" value="Delete image" />
+                <input class="delete-button"type="submit" value="Delete image" />
               </form>
             </div>
             <a id="modalDownloadLink" href="">

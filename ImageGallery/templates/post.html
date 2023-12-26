@@ -38,8 +38,15 @@
   <div class="container">
     <form action="{{ url_for('uploads') }}" method="post" enctype="multipart/form-data">
       <div class="row">
-        <label class="form-label" for="file">Upload your files</label>
-        <input type="file" name="file" id="file" class="form-control rounded-4 files-input" accept="image/*" multiple>
+        <label class="form-label" for="file">Click to Upload your image</label>
+        <input type="file" name="file" id="file" class="form-control rounded-4 files-input" accept="image/*">
+        <!-- <label for="file" id="file-label" class="file-label">Click here or Drag & Drop</label>
+        <div id="drop-area" class="drop-area">
+          <p>Drop files here</p>
+        </div>
+        <div id="drag-overlay" class="drag-overlay">
+          <p>Drop image to upload</p>
+        </div> -->
         <img id="displayImage" class="uploaded-image" src="#" alt="Uploaded Image">
       </div>
       <div class="row">
@@ -75,6 +82,80 @@
 
     reader.readAsDataURL(file);
   });
+</script>
+
+<script>
+  var dropArea = document.getElementById('drop-area');
+  var fileInput = document.getElementById('file');
+
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, preventDefaults, false);
+    document.body.addEventListener(eventName, preventDefaults, false);
+  });
+
+  ['dragenter', 'dragover'].forEach(eventName => {
+    dropArea.addEventListener(eventName, highlight, false);
+  });
+
+  ['dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, unhighlight, false);
+  });
+
+  dropArea.addEventListener('drop', handleDrop, false);
+
+  function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  function highlight() {
+    dropArea.classList.add('highlight');
+  }
+
+  function unhighlight() {
+    dropArea.classList.remove('highlight');
+  }
+
+  function handleDrop(e) {
+    var dt = e.dataTransfer;
+    var files = dt.files;
+
+    handleFiles(files);
+  }
+  // Handle dropped files
+  dropArea.addEventListener('drop', handleDrop, false);
+
+  // Trigger file input when the label is clicked
+  var fileLabel = document.getElementById('file-label');
+  fileLabel.addEventListener('click', function() {
+    fileInput.click();
+  });
+
+  // Handle files from input
+  fileInput.addEventListener('change', handleFilesFromInput, false);
+
+  function handleFilesFromInput() {
+    var file = this.files[0];
+    displayImage(file);
+  }
+
+  function handleFiles(files) {
+    if (files.length > 0) {
+      displayImage(files[0]);
+    }
+  }
+
+  function displayImage(file) {
+    var displayImg = document.getElementById('displayImage');
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      displayImg.src = e.target.result;
+      displayImg.style.display = 'block'; // Show the image after upload
+    };
+
+    reader.readAsDataURL(file);
+  }
 </script>
 
 </html>
